@@ -80,7 +80,7 @@ public class UserServiceTests
         _userRepositoryMock.Setup(r => r.GetAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>())).ReturnsAsync(user);
         _mapperMock.Setup(m => m.Map<UserResponse>(user)).Returns(response);
 
-        var result = await _userService.GetById(1);
+        var result = await _userService.GetById(1) ?? new UserResponse();
 
         Assert.Equal(response.Id, result.Id);
     }
@@ -96,7 +96,7 @@ public class UserServiceTests
         _userRepositoryMock.Setup(r => r.GetAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>())).ReturnsAsync(user);
         _mapperMock.Setup(m => m.Map<UserResponse>(user)).Returns(response);
 
-        var result = await _userService.GetByEmail("test@test.com");
+        var result = await _userService.GetByEmail("test@test.com") ?? new();
 
         Assert.Equal(response.Id, result.Id);
     }
@@ -250,8 +250,7 @@ public class UserServiceTests
     {
         var users = new List<User>
         {
-            new User
-            {
+            new() {
                 Id = 1,
                 FullName = "Test",
                 Login = "test",
@@ -265,8 +264,7 @@ public class UserServiceTests
 
         var userResponses = new List<UserResponse>
         {
-            new UserResponse
-            {
+            new() {
                 Id = 1,
                 FullName = "Test",
                 Login = "test",

@@ -20,21 +20,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # - name: Debug Variables (for troubleshooting)
-    #   run: |
-    #     echo "Azure WebApp Name: ${{ env.AZURE_WEBAPP_NAME }}"
-    #     echo "Azure Resource Group: ${{ env.AZURE_RESOURCE_GROUP }}"
-    #     echo "Docker Username: ${{ env.DOCKER_USERNAME }}"
-    #     echo "Docker Image: ${{ env.DOCKER_IMAGE_NAME }}"
-    #     echo "JWT Issuer: ${{ vars.JWT_ISSUER }}"
-    #     echo "Loki URI: ${{ vars.LOKI_URI }}"
-    #     echo "Secrets are hidden, but checking if they exist:"
-    #     echo "Azure SQL Connection String exists: ${{ secrets.AZURE_SQL_CONNECTION_STRING != '' }}"
-    #     echo "JWT Key exists: ${{ secrets.JWT_KEY != '' }}"
-    #     echo "Docker Password exists: ${{ secrets.DOCKER_PASSWORD != '' }}"
-    #     echo "Azure Credentials exists: ${{ secrets.AZURE_CREDENTIALS != '' }}"
-    #     echo "Azure Publish Profile exists: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE != '' }}"
-
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -73,7 +58,7 @@ jobs:
       run: |
         echo "Configurando vari�veis de ambiente no Azure Web App..."
         
-        # Verificar se as vari�veis necess�rias est�o definidas
+        # Verificar se as variáveis necessárias estão definidas
         if [ -z "${{ env.AZURE_RESOURCE_GROUP }}" ]; then
           echo "ERROR: AZURE_RESOURCE_GROUP n�o est� definido!"
           exit 1
@@ -84,7 +69,7 @@ jobs:
           exit 1
         fi
         
-        # Configurar vari�veis de ambiente usando Azure CLI
+        # Configurar variáveis de ambiente usando Azure CLI
         az webapp config appsettings set \
           --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
           --name "${{ env.AZURE_WEBAPP_NAME }}" \

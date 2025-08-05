@@ -47,7 +47,7 @@ public class UserService : IUserService
             throw new Exception("The user doesn't exist");
 
         Expression<Func<User, bool>> predicate = x => x.Id == request.Id;
-        var userCurrent = await _userRepository.GetAsync(predicate);
+        var userCurrent = await _userRepository.GetAsync(predicate) ?? throw new ArgumentException("The user doesn't exist.");
 
         var user = _mapper.Map<User>(request);
         user.CreatedAt = userCurrent.CreatedAt;
@@ -63,7 +63,7 @@ public class UserService : IUserService
             throw new Exception("The user doesn't exist");
 
         Expression<Func<User, bool>> predicate = x => x.Id == id;
-        var user = await _userRepository.GetAsync(predicate);
+        var user = await _userRepository.GetAsync(predicate) ?? throw new ArgumentException("The user doesn't exist.");
 
         await _userRepository.DeleteAsync(user);
         await _unitOfWork.CommitAsync();
@@ -112,7 +112,7 @@ public class UserService : IUserService
             throw new Exception("The user doesn't exist.");
 
         Expression<Func<User, bool>> predicate = x => x.Id == id;
-        var user = await _userRepository.GetAsync(predicate);
+        var user = await _userRepository.GetAsync(predicate) ?? throw new ArgumentException("The user doesn't exist.");
 
         user.IsActive = true;
 
@@ -127,7 +127,7 @@ public class UserService : IUserService
             throw new Exception("The user doesn't exist.");
 
         Expression<Func<User, bool>> predicate = x => x.Id == id;
-        var user = await _userRepository.GetAsync(predicate);
+        var user = await _userRepository.GetAsync(predicate) ?? throw new ArgumentException("The user doesn't exist.");
 
         user.IsActive = false;
 

@@ -33,7 +33,7 @@ public class UserValidatorTests
     [Trait("Category", "UserValidator")]
     public void CreateUser_Should_Have_Error_When_Login_Is_Null()
     {
-        var model = new CreateUserRequest { FullName = "Valid FullName", Login = null, Password = "ValidPass1!", Email = "user@email.com" };
+        var model = new CreateUserRequest { FullName = "Valid FullName", Login = string.Empty, Password = "ValidPass1!", Email = "user@email.com" };
         var result = _createValidator.TestValidate(model);
         result.ShouldHaveValidationErrorFor(x => x.Login);
     }
@@ -60,7 +60,7 @@ public class UserValidatorTests
     [Trait("Category", "UserValidator")]
     public void CreateUser_Should_Have_Error_When_Password_Is_Null()
     {
-        var model = new CreateUserRequest { FullName = "Valid FullName", Login = "ValidLogin1", Password = null, Email = "user@email.com" };
+        var model = new CreateUserRequest { FullName = "Valid FullName", Login = "ValidLogin1", Password = string.Empty, Email = "user@email.com" };
         var result = _createValidator.TestValidate(model);
         result.ShouldHaveValidationErrorFor(x => x.Password);
     }
@@ -84,7 +84,7 @@ public class UserValidatorTests
     [Trait("Category", "UserValidator")]
     public void CreateUser_Should_Have_Error_When_Email_Is_Null()
     {
-        var model = new CreateUserRequest { FullName = "Valid FullName", Login = "ValidLogin1", Password = "ValidPass1!", Email = null };
+        var model = new CreateUserRequest { FullName = "Valid FullName", Login = "ValidLogin1", Password = "ValidPass1!", Email = string.Empty };
         var result = _createValidator.TestValidate(model);
         result.ShouldHaveValidationErrorFor(x => x.Email);
     }
@@ -152,7 +152,7 @@ public class UserValidatorTests
     [Trait("Category", "UserValidator")]
     public void UpdateUser_Should_Have_Error_When_Login_Is_Null()
     {
-        var model = new UpdateUserRequest { Id = 1, FullName = "Valid FullName", Login = null, Password = "ValidPass1!", Email = "user@email.com" };
+        var model = new UpdateUserRequest { Id = 1, FullName = "Valid FullName", Login = string.Empty, Password = "ValidPass1!", Email = "user@email.com" };
         var result = _updateValidator.TestValidate(model);
         result.ShouldHaveValidationErrorFor(x => x.Login);
     }
@@ -179,7 +179,7 @@ public class UserValidatorTests
     [Trait("Category", "UserValidator")]
     public void UpdateUser_Should_Have_Error_When_Password_Is_Null()
     {
-        var model = new UpdateUserRequest { Id = 1, FullName = "Valid FullName", Login = "ValidLogin1", Password = null, Email = "user@email.com" };
+        var model = new UpdateUserRequest { Id = 1, FullName = "Valid FullName", Login = "ValidLogin1", Password = string.Empty, Email = "user@email.com" };
         var result = _updateValidator.TestValidate(model);
         result.ShouldHaveValidationErrorFor(x => x.Password);
     }
@@ -203,7 +203,7 @@ public class UserValidatorTests
     [Trait("Category", "UserValidator")]
     public void UpdateUser_Should_Have_Error_When_Email_Is_Null()
     {
-        var model = new UpdateUserRequest { Id = 1, FullName = "Valid FullName", Login = "ValidLogin1", Password = "ValidPass1!", Email = null };
+        var model = new UpdateUserRequest { Id = 1, FullName = "Valid FullName", Login = "ValidLogin1", Password = "ValidPass1!", Email = string.Empty };
         var result = _updateValidator.TestValidate(model);
         result.ShouldHaveValidationErrorFor(x => x.Email);
     }
