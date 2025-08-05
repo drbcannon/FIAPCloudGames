@@ -7,7 +7,7 @@ services:
       - "8080:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgresql;Port=5432;Database=FIAPCloudGames;Username=postgres;Password=P@ssw0rdF1@PT3ch;
+      - ConnectionStrings__DefaultConnection=Host=postgresql;Port=5432;Database=postgres;Username=postgres;Password=PAssw0rdF1APT3ch;
     depends_on:
       postgresql:
         condition: service_healthy
@@ -19,9 +19,9 @@ services:
   postgresql:
     image: postgres:15-alpine
     environment:
-      - POSTGRES_DB=FIAPCloudGames
+      - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=P@ssw0rdF1@PT3ch
+      - POSTGRES_PASSWORD=PAssw0rdF1APT3ch
     ports:
       - "5432:5432"
     volumes:
@@ -71,7 +71,6 @@ services:
 
 volumes:
   postgresql_data:
-  # sqlserver_data:
   grafana_data:
 
 networks:

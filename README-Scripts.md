@@ -38,7 +38,7 @@ dev-start.bat
 | **Grafana** | http://localhost:3000 | admin/admin |
 | **Prometheus** | http://localhost:9090 | - |
 | **Loki** | http://localhost:3100 | - |
-| **PostgreSQL** | localhost:5432 | postgres/P@ssw0rdF1@PT3ch |
+| **PostgreSQL** | localhost:5432 | postgres/PAssw0rdF1APT3ch |
 
 ## 🛠️ Comandos Úteis
 
@@ -127,8 +127,8 @@ Após executar qualquer script, você verá uma tela organizada assim:
    📦 Loki:          http://localhost:3100/ready
 
 🔹 Banco de Dados:
-   🗄️ PostgreSQL:     localhost:5432     database: FIAPCloudGames
-      👤 Usuário: postgres | 🔐 Senha: P@ssw0rdF1@PT3ch
+   🗄️ PostgreSQL:     localhost:5432     database: postgres
+      👤 Usuário: postgres | 🔐 Senha: PAssw0rdF1APT3ch
 
 ═══════════════════════════════════════════════════════════════
 🛠️ COMANDOS ÚTEIS:
