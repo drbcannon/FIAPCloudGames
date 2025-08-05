@@ -30,7 +30,7 @@ O projeto consiste em:
 - **Frameworks:**
   - ASP.NET Core Web API
   - Entity Framework Core
-- **Banco de Dados:** PosgreSQL o outros
+- **Banco de Dados:** PosgreSQL
 - **Autenticação e Autorização:**
   - ASP.NET Core
   - JWT (JSON Web Token) para autenticação na API
@@ -62,7 +62,7 @@ A estrutura do projeto é organizada da seguinte forma:
 ### **Pré-requisitos**
 
 - .NET SDK 8.0 ou superior
-- SQLServer (ou Docker para execução via containers)
+- PostgreSQL (ou Docker para execução via containers)
 - VS Code, Visual Studio 2022 (ou qualquer IDE de sua preferência)
 - Git
 
@@ -98,8 +98,8 @@ Os scripts automatizam todo o processo:
 Se preferir configurar manualmente ou não tiver Docker disponível:
 
 2. **Configuração do Banco de Dados:**
-   - Configure uma instância dos SQLServer e crie um database.
-   - No arquivo `appsettings.json`, configure a string de conexão do SQLServer de acordo com os parâmetros de acesso da instância e da base de dados criada.
+   - Configure uma instância dos PostgreSQL e crie um database.
+   - No arquivo `appsettings.json`, configure a string de conexão do PostgreSQL de acordo com os parâmetros de acesso da instância e da base de dados criada.
    - Entre no diretório de infraestrutura da aplicação `cd src/FIAPCloudGames.Infrastructure/` e o comando `Update-Database` para que a configuração das Migrations crie as tabelas e popule com os dados básicos.
 
 3. **Executar a API:**
@@ -120,12 +120,77 @@ A documentação da API está disponível através do Swagger. Após iniciar a A
 
 http://localhost:5001/swagger
 
-## **9. Monitoramento com Grafana**
+## **9. Pipeline de CI/CD - Configuração de Variáveis**
+
+O projeto utiliza GitHub Actions para automação do pipeline de CI/CD. Para que o deploy funcione corretamente, é necessário configurar as seguintes variáveis no repositório GitHub:
+
+### **9.1. Variáveis de Repositório (Repository Variables)**
+
+Acesse **Settings > Secrets and variables > Actions > Variables** e configure:
+
+| Variável | Descrição | Exemplo |
+|----------|-----------|---------|
+| `AZURE_WEBAPP_NAME` | Nome do Azure Web App onde a aplicação será hospedada | `techchallengephase2` |
+| `AZURE_RESOURCE_GROUP` | Nome do Resource Group no Azure | `rg-techchallenge` |
+| `DOCKER_USERNAME` | Nome de usuário do Docker Hub | `meuusuario` |
+| `JWT_ISSUER` | Emissor do token JWT para a aplicação | `FIAPCloudGames` |
+| `LOKI_URI` | URI do servidor Loki para envio de logs | `https://logs-prod.grafana.net/loki/api/v1/push` |
+
+### **9.2. Segredos do Repositório (Repository Secrets)**
+
+Acesse **Settings > Secrets and variables > Actions > Secrets** e configure:
+
+| Secret | Descrição | Como obter |
+|--------|-----------|------------|
+| `AZURE_SQL_CONNECTION_STRING` | String de conexão do banco PostgreSQL | Obtida no portal Azure, na seção Connection Strings do banco |
+| `JWT_KEY` | Chave secreta para assinatura dos tokens JWT | Gere uma chave segura com pelo menos 256 bits |
+| `DOCKER_PASSWORD` | Senha ou token de acesso do Docker Hub | Configurada no Docker Hub em Account Settings > Security |
+| `AZURE_CREDENTIALS` | Credenciais de service principal do Azure | Criada via Azure CLI: `az ad sp create-for-rbac` |
+
+### **9.3. Como Criar o Service Principal do Azure**
+
+Para gerar as credenciais do Azure, execute o seguinte comando no Azure CLI:
+
+```bash
+az ad sp create-for-rbac \
+  --name "github-actions-fiap-cloud-games" \
+  --role contributor \
+  --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group-name} \
+  --sdk-auth
+```
+
+O comando retornará um JSON similar a este (use como valor para `AZURE_CREDENTIALS`):
+
+```json
+{
+  "clientId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "clientSecret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "subscriptionId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "tenantId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+}
+```
+
+### **9.4. Funcionalidades do Pipeline**
+
+O pipeline de CD (`/.github/workflows/cd.yml`) executa as seguintes etapas:
+
+1. **Build e Testes:** Compila a aplicação .NET 8
+2. **Docker Build:** Cria e publica a imagem Docker no Docker Hub
+3. **Deploy Azure:** Configura e faz deploy no Azure Web App
+4. **Configuração:** Define variáveis de ambiente e configurações do container
+5. **Restart:** Reinicia a aplicação para aplicar as novas configurações
+
+### **9.5. Triggers do Pipeline**
+
+- **Push para main:** Deploy automático quando código é commitado na branch principal
+- **Dispatch manual:** Possibilidade de executar deploy manualmente via interface do GitHub
+
+## **10. Monitoramento com Grafana**
 
 > **📋 [Consulte o guia completo de configuração do Grafana - README-monitoring.md](README-monitoring.md)**
 
 Este guia descreve como configurar o Grafana para exibir métricas e logs utilizando as fontes de dados **Prometheus** e **Loki**.
 
-## **10. Avaliação**
+## **11. Avaliação**
 
 - Para feedbacks ou dúvidas utilize o recurso de Issues

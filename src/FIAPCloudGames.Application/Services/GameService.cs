@@ -13,17 +13,14 @@ public class GameService: IGameService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IGameRepository _gameRepository;
-    private readonly IJwtProvider _jwtProvider;
 
     public GameService(IUnitOfWork unitOfWork, 
         IMapper mapper, 
-        IGameRepository gameRepository,
-        IJwtProvider jwtProvider)
+        IGameRepository gameRepository)
     {
         _mapper = mapper;
         _unitOfWork = unitOfWork;
         _gameRepository = gameRepository;
-        _jwtProvider = jwtProvider;
     }
 
 
@@ -45,8 +42,7 @@ public class GameService: IGameService
             throw new Exception("The game doesn't exist");
 
         Expression<Func<Game, bool>> predicate = x => x.Id == request.Id;
-        var gameCurrent = await _gameRepository.GetAsync(predicate);
-
+        var gameCurrent = await _gameRepository.GetAsync(predicate) ?? throw new ArgumentException("The game doesn't exist");
         var game = _mapper.Map<Game>(request);
         game.CreatedAt = gameCurrent.CreatedAt;
 
@@ -61,7 +57,7 @@ public class GameService: IGameService
             throw new Exception("The game doesn't exist");
 
         Expression<Func<Game, bool>> predicate = x => x.Id == id;
-        var game = await _gameRepository.GetAsync(predicate);
+        var game = await _gameRepository.GetAsync(predicate) ?? throw new ArgumentException("The game doesn't exist");
 
         await _gameRepository.DeleteAsync(game);
         await _unitOfWork.CommitAsync();
@@ -99,7 +95,7 @@ public class GameService: IGameService
             throw new Exception("The game doesn't exist.");
 
         Expression<Func<Game, bool>> predicate = x => x.Id == id;
-        var game = await _gameRepository.GetAsync(predicate);
+        var game = await _gameRepository.GetAsync(predicate) ?? throw new ArgumentException("The game doesn't exist.");
 
         game.IsActive = true;
 
@@ -114,8 +110,8 @@ public class GameService: IGameService
             throw new Exception("The game doesn't exist.");
 
         Expression<Func<Game, bool>> predicate = x => x.Id == id; 
-        var game = await _gameRepository.GetAsync(predicate);
-        
+        var game = await _gameRepository.GetAsync(predicate) ?? throw new ArgumentException("The game doesn't exist.");
+
         game.IsActive = false;
 
         await _gameRepository.UpdateAsync(game);

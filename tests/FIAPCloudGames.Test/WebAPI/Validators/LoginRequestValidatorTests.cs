@@ -12,7 +12,7 @@ public class LoginRequestValidatorTests
     [Trait("Category", "LoginRequestValidator")]
     public void Should_Have_Error_When_Password_Is_Null()
     {
-        var model = new LoginRequest { Email = "user@email.com", Password = null };
+        var model = new LoginRequest { Email = "user@email.com", Password = string.Empty };
         var result = _validator.TestValidate(model);
         result.ShouldHaveValidationErrorFor(x => x.Password);
     }
@@ -48,7 +48,7 @@ public class LoginRequestValidatorTests
     [Trait("Category", "LoginRequestValidator")]
     public void Should_Have_Error_When_Email_Is_Null()
     {
-        var model = new LoginRequest { Email = null, Password = "ValidPass1!" };
+        var model = new LoginRequest { Email = string.Empty, Password = "ValidPass1!" };
         var result = _validator.TestValidate(model);
         result.ShouldHaveValidationErrorFor(x => x.Email);
     }

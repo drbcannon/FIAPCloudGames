@@ -14,7 +14,6 @@ public class GameServiceTests
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IMapper> _mapperMock;
-    private readonly Mock<IJwtProvider> _jwtProviderMock;
 
     private readonly Mock<IGameRepository> _gameRepositoryMock;
     private readonly GameService _gameService;
@@ -23,10 +22,9 @@ public class GameServiceTests
     {
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _mapperMock = new Mock<IMapper>();
-        _jwtProviderMock = new Mock<IJwtProvider>();
 
         _gameRepositoryMock = new Mock<IGameRepository>();
-        _gameService = new GameService(_unitOfWorkMock.Object, _mapperMock.Object, _gameRepositoryMock.Object, _jwtProviderMock.Object);
+        _gameService = new GameService(_unitOfWorkMock.Object, _mapperMock.Object, _gameRepositoryMock.Object);
     }
 
     [Fact]

@@ -7,33 +7,33 @@ services:
       - "8080:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=FIAPCloudGames;User Id=sa;Password=P@ssw0rdF1@PT3ch;TrustServerCertificate=true;
+      - ConnectionStrings__DefaultConnection=Host=postgresql;Port=5432;Database=postgres;Username=postgres;Password=PAssw0rdF1APT3ch;
     depends_on:
-      sqlserver:
+      postgresql:
         condition: service_healthy
     networks:
       - fcg-network
     restart: unless-stopped
 
-  # SQL Server para persistência de dados
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+  # PostgreSQL para persistência de dados
+  postgresql:
+    image: postgres:15-alpine
     environment:
-      - SA_PASSWORD=P@ssw0rdF1@PT3ch
-      - ACCEPT_EULA=Y
-      - MSSQL_PID=Express
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=PAssw0rdF1APT3ch
     ports:
-      - "1433:1433"
+      - "5432:5432"
     volumes:
-      - sqlserver_data:/var/opt/mssql
+      - postgresql_data:/var/lib/postgresql/data
     networks:
       - fcg-network
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P P@ssw0rdF1@PT3ch -C -Q 'SELECT 1' || exit 1"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 15s
       timeout: 5s
       retries: 5
-      start_period: 60s
+      start_period: 30s
     restart: unless-stopped
 
   # Prometheus para monitoramento
@@ -70,7 +70,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  sqlserver_data:
+  postgresql_data:
   grafana_data:
 
 networks:

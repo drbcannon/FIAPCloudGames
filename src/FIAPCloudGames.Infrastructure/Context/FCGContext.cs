@@ -36,7 +36,7 @@ public static class ModelBuilderExtensions
                 Email = "adm@adm.com",
                 UserType = UserRole.Admin,
                 IsActive = true,
-                CreatedAt = new DateTime(2025, 5, 30, 12, 50, 51, 795, DateTimeKind.Utc).AddTicks(8972)
+                CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc)
             }
         );
     }
