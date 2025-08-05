@@ -3,6 +3,7 @@ using FIAPCloudGames.Domain.Repositores;
 using FIAPCloudGames.Infrastructure.Context;
 using FIAPCloudGames.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,14 +25,19 @@ public static class DependencyInjection
     {
         string connectionString = configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
 
+        // PostgreSQL Configuration
         services.AddDbContextPool<FCGContext>(options =>
         {
-            options.UseSqlServer(connectionString,
+            options.UseNpgsql(connectionString,
             op =>
             {
                 op.CommandTimeout(300);
                 op.MaxBatchSize(1);
             });
+            
+            // Configurar warnings para suprimir o aviso de mudanças pendentes no modelo
+            options.ConfigureWarnings(warnings =>
+                warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
         })
         .AddLogging();
 

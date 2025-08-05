@@ -23,6 +23,27 @@ public class DatabaseMigrationService : IHostedService
         {
             _logger.LogInformation("Iniciando migração automática do banco de dados...");
 
+            // Verifica se o banco de dados existe
+            var canConnect = await context.Database.CanConnectAsync(cancellationToken);
+            _logger.LogInformation("Conexão com banco de dados: {CanConnect}", canConnect ? "Sucesso" : "Falha");
+
+            // Verifica migrações pendentes
+            var pendingMigrations = await context.Database.GetPendingMigrationsAsync(cancellationToken);
+            var pendingCount = pendingMigrations.Count();
+            
+            if (pendingCount > 0)
+            {
+                _logger.LogInformation("Encontradas {Count} migrações pendentes", pendingCount);
+                foreach (var migration in pendingMigrations)
+                {
+                    _logger.LogInformation("Migração pendente: {Migration}", migration);
+                }
+            }
+            else
+            {
+                _logger.LogInformation("Nenhuma migração pendente encontrada");
+            }
+
             await context.Database.MigrateAsync(cancellationToken);
 
             _logger.LogInformation("Migração do banco de dados concluída com sucesso!");

@@ -30,7 +30,7 @@ O projeto consiste em:
 - **Frameworks:**
   - ASP.NET Core Web API
   - Entity Framework Core
-- **Banco de Dados:** PosgreSQL o outros
+- **Banco de Dados:** PosgreSQL
 - **Autenticação e Autorização:**
   - ASP.NET Core
   - JWT (JSON Web Token) para autenticação na API
@@ -62,7 +62,7 @@ A estrutura do projeto é organizada da seguinte forma:
 ### **Pré-requisitos**
 
 - .NET SDK 8.0 ou superior
-- SQLServer (ou Docker para execução via containers)
+- PostgreSQL (ou Docker para execução via containers)
 - VS Code, Visual Studio 2022 (ou qualquer IDE de sua preferência)
 - Git
 
@@ -98,8 +98,8 @@ Os scripts automatizam todo o processo:
 Se preferir configurar manualmente ou não tiver Docker disponível:
 
 2. **Configuração do Banco de Dados:**
-   - Configure uma instância dos SQLServer e crie um database.
-   - No arquivo `appsettings.json`, configure a string de conexão do SQLServer de acordo com os parâmetros de acesso da instância e da base de dados criada.
+   - Configure uma instância dos PostgreSQL e crie um database.
+   - No arquivo `appsettings.json`, configure a string de conexão do PostgreSQL de acordo com os parâmetros de acesso da instância e da base de dados criada.
    - Entre no diretório de infraestrutura da aplicação `cd src/FIAPCloudGames.Infrastructure/` e o comando `Update-Database` para que a configuração das Migrations crie as tabelas e popule com os dados básicos.
 
 3. **Executar a API:**
@@ -142,7 +142,7 @@ Acesse **Settings > Secrets and variables > Actions > Secrets** e configure:
 
 | Secret | Descrição | Como obter |
 |--------|-----------|------------|
-| `AZURE_SQL_CONNECTION_STRING` | String de conexão do banco SQL Server no Azure | Obtida no portal Azure, na seção Connection Strings do banco |
+| `AZURE_SQL_CONNECTION_STRING` | String de conexão do banco PostgreSQL | Obtida no portal Azure, na seção Connection Strings do banco |
 | `JWT_KEY` | Chave secreta para assinatura dos tokens JWT | Gere uma chave segura com pelo menos 256 bits |
 | `DOCKER_PASSWORD` | Senha ou token de acesso do Docker Hub | Configurada no Docker Hub em Account Settings > Security |
 | `AZURE_CREDENTIALS` | Credenciais de service principal do Azure | Criada via Azure CLI: `az ad sp create-for-rbac` |
